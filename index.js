@@ -5,10 +5,16 @@ var server = require('http').createServer(app);
 var io = require('socket.io')(server);
 var port = process.env.PORT || 3000;
 
-server.listen(port, function () {
-  console.log('Server listening at port %d', port);
-});
-
+if (process.env.OPENSHIFT_NODEJS_IP && process.env.OPENSHIFT_NODEJS_PORT) {
+  http.listen(process.env.OPENSHIFT_NODEJS_PORT, process.env.OPENSHIFT_NODEJS_IP, function() {
+    console.log('Listeningopenshift on port: ' + process.env.OPENSHIFT_NODEJS_PORT);
+  });
+}
+else {
+  http.listen(80, function () {
+    console.log('Listingport: 80')
+  })
+}
 // Routing
 app.use(express.static(__dirname + '/public'));
 
